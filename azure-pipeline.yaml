@@ -1,0 +1,23 @@
+---
+pool: Default
+
+trigger: none
+
+pr:
+  - main
+
+resources:
+  repositories:
+    - repository: azuretemplates
+      type: github
+      name: AzureDevopstemplates.git
+      refs: 'refs/heads/main'
+      endpoint: github.com_Chinnu6696
+
+steps:
+  - template: azuretemplate/azure-pipelines.yaml@resuabePublicAssets
+    parameters:
+      goal: 'package'
+      specificVersion: ''
+      artifactsPath: '**/spring-petclinic*.jar'
+      # testResultsFiles: '**/surefire-reports/TEST-*.xml'

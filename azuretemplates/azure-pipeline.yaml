@@ -1,0 +1,43 @@
+---
+parameters:
+  - name: maven
+    displayName: Maven 
+    type: string
+    default: mvn package
+
+  - name: spring petclinic
+    displayName: spring petclinic
+    type: string
+    default: '**/*.jar'
+
+
+steps:
+  - task: Maven@4
+    displayName: 'build the maven'  
+    inputs:
+      goals: package
+      mavenPomFile: pom.xml
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        
+        # - task: Maven@4
+        #   displayName: 'publish the maven'
+        #   inputs:
+        #     goals: package
+        #     mavenPomFile: pom.xml
+        #     publishJUnitResults: true
+        #     # testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        #     # jdkVersionOption: 'default'
+        
+  - task: CopyFiles@2
+    displayName: 'Copy scripts'
+    inputs: 
+      contents: '**/spring-petclinic*.jar'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+
+  - task: PublishBuildArtifacts@1
+    inputs: 
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+
+
